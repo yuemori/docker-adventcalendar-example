@@ -1,0 +1,21 @@
+version: '2'
+services:
+  database:
+    image: mysql:5.7
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    ports:
+      - 3306:3306
+
+  rails:
+    image: myrails-development
+    build:
+      context: .
+      dockerfile: Dockerfile.development
+    environment:
+      RAILS_ENV: development
+      DATABASE_URL: mysql2://root@database:3306/sample_database
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - 3000:3000
