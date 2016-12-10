@@ -1,9 +1,17 @@
 version: '2'
 services:
+  datastore:
+    image: busybox
+    volumes:
+      - mysql:/var/lib/mysql
+      - bundle_install:/usr/local/bundle
+
   database:
     image: mysql:5.7
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    volumes_from:
+      - datastore
     ports:
       - 3306:3306
 
@@ -15,7 +23,15 @@ services:
     environment:
       RAILS_ENV: development
       DATABASE_URL: mysql2://root@database:3306/sample_database
+    volumes_from:
+      - datastore
     volumes:
       - .:/usr/src/app
     ports:
       - 3000:3000
+
+volumes:
+  mysql:
+    driver: local
+  bundle_install:
+    driver: local
