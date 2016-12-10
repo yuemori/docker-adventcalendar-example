@@ -12,6 +12,8 @@ services:
     build:
       context: ../ # ディレクトリを掘っているため
       dockerfile: Dockerfile.test
+    depends_on:
+      - database
     environment:
       RAILS_ENV: test
       DATABASE_URL: mysql2://root@database:3306/sample_database
