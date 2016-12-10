@@ -23,6 +23,8 @@ services:
     environment:
       RAILS_ENV: development
       DATABASE_URL: mysql2://root@database:3306/sample_database
+    depends_on:
+      - database
     volumes_from:
       - datastore
     volumes:
