@@ -1,14 +1,14 @@
 version: '2'
 services:
   database:
-    container_name: myrails-test-database
+    container_name: myrails-test-database-${BUILD_TAG}
     image: mysql:5.7
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
 
   rails:
-    container_name: myrails-test-rails
-    image: myrails-test
+    container_name: myrails-test-rails-${BUILD_TAG}
+    image: myrails-test:${BUILD_TAG}
     build:
       context: ../ # ディレクトリを掘っているため
       dockerfile: Dockerfile.test

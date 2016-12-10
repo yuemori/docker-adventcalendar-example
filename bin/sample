@@ -6,6 +6,8 @@ RAILS_ROOT=$(cd $(dirname $0)/../ && pwd)
 DEV_COMPOSE_FILE="${RAILS_ROOT}/docker-compose.yml"
 TEST_COMPOSE_FILE="${RAILS_ROOT}/dockerfiles/docker-compose.test.yml"
 
+export BUILD_TAG=${BUILD_TAG:-'latest'}
+
 function usage() {
   cat <<EOF
 Usage:

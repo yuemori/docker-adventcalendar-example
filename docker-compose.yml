@@ -1,14 +1,14 @@
 version: '2'
 services:
   datastore:
-    container_name: myrails-development-datastore
+    container_name: myrails-development-datastore-${BUILD_TAG}
     image: busybox
     volumes:
       - mysql:/var/lib/mysql
       - bundle_install:/usr/local/bundle
 
   database:
-    container_name: myrails-development-database
+    container_name: myrails-development-database-${BUILD_TAG}
     image: mysql:5.7
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
@@ -18,8 +18,8 @@ services:
       - 3306:3306
 
   rails: &rails
-    container_name: myrails-development-rails
-    image: myrails-development
+    container_name: myrails-development-rails-${BUILD_TAG}
+    image: myrails-development:${BUILD_TAG}
     build:
       context: .
       dockerfile: Dockerfile.development
@@ -39,7 +39,7 @@ services:
 
   spring:
     <<: *rails
-    container_name: myrails-development-spring
+    container_name: myrails-development-spring-${BUILD_TAG}
     command: spring server
     environment:
       <<: *rails_environment
