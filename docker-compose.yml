@@ -1,12 +1,14 @@
 version: '2'
 services:
   datastore:
+    container_name: myrails-development-datastore
     image: busybox
     volumes:
       - mysql:/var/lib/mysql
       - bundle_install:/usr/local/bundle
 
   database:
+    container_name: myrails-development-database
     image: mysql:5.7
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
@@ -16,6 +18,7 @@ services:
       - 3306:3306
 
   rails:
+    container_name: myrails-development-rails
     image: myrails-development
     build:
       context: .

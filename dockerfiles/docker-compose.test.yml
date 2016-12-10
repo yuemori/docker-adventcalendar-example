@@ -1,11 +1,13 @@
 version: '2'
 services:
   database:
+    container_name: myrails-test-database
     image: mysql:5.7
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
 
   rails:
+    container_name: myrails-test-rails
     image: myrails-test
     build:
       context: ../ # ディレクトリを掘っているため
