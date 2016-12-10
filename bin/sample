@@ -21,6 +21,7 @@ Commands:
   restart     サーバを再起動する
   logs        バックグラウンドで起動しているサーバのログを見る
   up          サーバをフォアグラウンドで起動する
+  exec        springコンテナでコマンドを実行する
   test        テストを実行する
 EOF
 }
@@ -60,6 +61,34 @@ function logs() {
 function restart() {
   start
   stop
+}
+
+function execute_command() {
+  local pid=$(docker-compose ps -q spring)
+
+  if [ -z "$pid" -o $(docker ps --quiet --filter id=${pid} | wc -l) -eq 0 ];then
+    docker-compose up -d spring
+
+    local message="waiting for spring start"
+
+    while true
+    do
+      log=$(docker-compose logs spring | grep "started on /tmp/spring.sock" | wc -l)
+
+      if [ $log -ge 1 ];then
+        echo "spring the started!"
+        break;
+      fi
+
+      message="$message."
+      echo -e "\r$message\c"
+
+      sleep 1
+    done
+  fi
+
+  docker-compose exec spring $@
+  exit $?
 }
 
 function status() {
@@ -127,6 +156,12 @@ case "${1}" in
 
   "test")
     run_test
+  ;;
+
+  "exec")
+    shift
+
+    execute_command $@
   ;;
 
   *)

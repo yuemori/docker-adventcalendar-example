@@ -17,13 +17,13 @@ services:
     ports:
       - 3306:3306
 
-  rails:
+  rails: &rails
     container_name: myrails-development-rails
     image: myrails-development
     build:
       context: .
       dockerfile: Dockerfile.development
-    environment:
+    environment: &rails_environment
       RAILS_ENV: development
       DATABASE_URL: mysql2://root@database:3306/sample_database
     depends_on:
@@ -34,6 +34,17 @@ services:
       - .:/usr/src/app
     ports:
       - 3000:3000
+    tty: true
+    stdin_open: true
+
+  spring:
+    <<: *rails
+    container_name: myrails-development-spring
+    command: spring server
+    environment:
+      <<: *rails_environment
+      SPRING_SOCKET: /tmp/spring.sock
+    ports: []
 
 volumes:
   mysql:
